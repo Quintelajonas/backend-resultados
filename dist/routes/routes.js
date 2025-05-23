@@ -1,0 +1,25 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const multer_1 = __importDefault(require("multer"));
+const xlsxController_1 = require("../controllers/xlsxController");
+const promotorController_1 = require("../controllers/promotorController");
+const auth_1 = require("../Middlewares/auth");
+const authController_1 = require("../controllers/authController");
+const feedbackController_1 = require("../controllers/feedbackController");
+const upload = (0, multer_1.default)({ dest: 'src/uploads' });
+const router = (0, express_1.Router)();
+router.post('/usuario/buscar', authController_1.BuscarUsuarios);
+router.get('/promotores', promotorController_1.BuscarPromotoresGeral);
+router.post('/login', authController_1.login);
+router.post('/upload', upload.single('file'), xlsxController_1.uploadXLSX);
+router.get('/promotor', auth_1.authMiddleware, promotorController_1.BuscarPorNome);
+router.post('/register', authController_1.register);
+router.get('/promotores/:id', promotorController_1.DetalhamentoPromtor);
+router.post('/feedbacks', feedbackController_1.criarFeedBack);
+router.get('/promotores/:id/feedbacks', feedbackController_1.listarFeedbacksPorPromotor);
+router.get('/usuarios', authController_1.buscarUsuariosFeedback);
+exports.default = router;
