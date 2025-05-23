@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id        Int        @id @default(autoincrement())
+  nome      String
+  email     String
+  senha     String
+  matricula String     @unique
+  createdAt DateTime   @default(now())
+  feedback  Feedback[]
+}
+
+model Promotor {
+  id         Int                @id @default(autoincrement())
+  nome       String
+  fotoUrl    String
+  matricula  String             @unique
+  email      String?
+  telefone   String?
+  vendas     Venda[]
+  desempenho DesempenhoMensal[]
+  feedback   Feedback[]
+}
+
+model Venda {
+  id         Int      @id @default(autoincrement())
+  data       DateTime @default(now())
+  quantidade Int
+  promotor   Promotor @relation(fields: [promotorId], references: [id])
+  promotorId Int
+}
+
+model DesempenhoMensal {
+  id         Int      @id @default(autoincrement())
+  mes        Int
+  ano        Int
+  vendas     Int
+  faltas     Int
+  promotor   Promotor @relation(fields: [promotorId], references: [id])
+  promotorId Int
+
+  @@unique([promotorId, mes, ano])
+}
+
+model Feedback {
+  id         Int      @id @default(autoincrement())
+  promotor   Promotor @relation(fields: [promotorId], references: [id])
+  promotorId Int
+
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+  usuarioId Int
+
+  abordou           Boolean
+  uniformizado      Boolean
+  dominaProduto     Boolean
+  advertencia       Boolean
+  motivoAdvertencia String?
+  observacoes       String?
+
+  criadoEm DateTime @default(now())
+}
