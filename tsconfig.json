@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2020",            // Ou maior (ES2019, ES2022, etc)
-    "module": "commonjs",          // Normalmente commonjs em Node
-    "lib": ["ES2020"],             // Biblioteca que inclui as APIs do JS e do Node
-    "moduleResolution": "node",
+    "target": "ES6",
+    "module": "commonjs",
+    "lib": ["ES6"],
+    "rootDir": "./src",
+    "outDir": "./dist",
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "outDir": "dist"
-  },
-  "include": ["src"]
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "types": ["node"],
+  
+  }
 }
